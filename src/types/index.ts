@@ -68,8 +68,8 @@ export type FigmaFile = {
   document: FigmaNode;
   schemaVersion: 0;
   mainFileKey: string;
-  components: { [key: string]: FigmaComponent };
-  componentSets: { [key: string]: FigmaComponentSet };
+  components: Record<string, FigmaComponent>; //{ [key: string]: FigmaComponent };
+  componentSets: Record<string, FigmaComponentSet>; //{ [key: string]: FigmaComponentSet };
 };
 
 export type FigmaAsset = {
@@ -79,6 +79,6 @@ export type FigmaAsset = {
 
 export type FigmaImage = {
   err: string;
-  images: { [key: string]: string };
+  images: Record<string, string>; // { [key: string]: string };
   status: number;
 };
