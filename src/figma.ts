@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { type AxiosInstance } from "axios";
 import { createWriteStream, existsSync, mkdirSync } from "fs";
 import { dirname, resolve } from "path";
 import { stringify } from "qs";
@@ -7,8 +7,8 @@ import type { FigmaAsset, FigmaConfig, FigmaFile, FigmaImage } from "./types";
 const baseURL = "https://api.figma.com/v1";
 
 export type AssetsFromFigmaFile = {
-  fileId?: string;
-  pageName?: string;
+  fileId: string;
+  pageName: string;
   frameName?: string;
   ids?: string[];
 };
@@ -21,13 +21,13 @@ export type ExportFigmaAsset = {
 
 export class FigmaAssetExporter {
   private _config: FigmaConfig & Required<Pick<FigmaConfig, "format">>;
-  private _clientInstance?: AxiosInstance;
+  private _clientInstance: AxiosInstance;
 
   constructor(config: FigmaConfig) {
     this._config = {
-      ...config,
       format: "svg",
       scale: 1,
+      ...config,
     };
     this._clientInstance = this.createClientInstance(this._config.token);
   }
@@ -43,25 +43,12 @@ export class FigmaAssetExporter {
     return instance;
   }
 
-  getAssets(ids?: string[]) {
-    return this.getAssetsFromFigmaFile({
-      fileId: this._config.fileId,
-      pageName: this._config.pageName,
-      frameName: this._config.frameName,
-      ids,
-    });
-  }
-
   private async getAssetsFromFigmaFile({
     fileId,
     pageName,
     frameName,
     ids,
-  }: AssetsFromFigmaFile = {}): Promise<FigmaAsset[]> {
-    if (!this._clientInstance) {
-      throw new Error("Need to create instance first!");
-    }
-
+  }: AssetsFromFigmaFile): Promise<FigmaAsset[]> {
     try {
       const queryString = stringify(
         {
@@ -71,16 +58,17 @@ export class FigmaAssetExporter {
           skipNulls: true,
         }
       );
-
-      const res = await this._clientInstance?.get(
+      const res = await this._clientInstance.get<FigmaFile>(
         `/files/${fileId}?${queryString}`
       );
-      const data: FigmaFile = res.data;
+      const data = res.data;
       const page = data.document.children.find(
         (child) => child.name === pageName
       );
 
-      if (!page) throw new Error("Cannot find Assets Page!");
+      if (!page) {
+        throw new Error("Cannot find Assets Page!");
+      }
 
       let assetArray = page.children;
 
@@ -90,21 +78,24 @@ export class FigmaAssetExporter {
           assetArray;
       }
 
-      const assets = assetArray.flatMap((asset) => {
-        if (asset.children && asset.children.length > 0) {
-          return asset.children.map(({ id, name }) => {
-            return { id, name };
-          });
-        }
-
-        return [{ id: asset.id, name: asset.name }];
-      });
+      const assets = assetArray
+        .flatMap((asset) => (asset.children?.length ? asset.children : [asset]))
+        .map(({ id, name }) => ({ id, name }));
 
       return assets;
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching assets from Figma file:", error);
       return [];
     }
+  }
+
+  getAssets(ids?: string[]): Promise<FigmaAsset[]> {
+    return this.getAssetsFromFigmaFile({
+      fileId: this._config.fileId,
+      pageName: this._config.pageName,
+      frameName: this._config.frameName,
+      ids,
+    });
   }
 
   async exportAssets(assets: FigmaAsset[]): Promise<ExportFigmaAsset[]> {
@@ -126,36 +117,30 @@ export class FigmaAssetExporter {
         }
       );
 
-      const res = await this._clientInstance.get(
+      const res = await this._clientInstance.get<FigmaImage>(
         `/images/${this._config.fileId}?${queryString}`
       );
-      const data: FigmaImage = res.data;
+      const data = res.data;
 
-      // Map or object?
-      const results = assets.map((asset) => ({
+      return assets.map((asset) => ({
         format,
         image: data.images[asset.id],
         name: asset.name,
       }));
-
-      return results;
     } catch (error) {
-      console.error(error);
+      console.error("Error exporting assets:", error);
       return [];
     }
   }
 
-  saveAssets(assets: ExportFigmaAsset[]) {
-    assets.forEach((asset) => this.saveAsset(asset));
+  async saveAssets(assets: ExportFigmaAsset[]) {
+    await Promise.all(assets.map((asset) => this.saveAsset(asset)));
   }
 
   async saveAsset(asset: ExportFigmaAsset) {
-    const config = { ...this._config };
     const { name, image, format } = asset;
-
-    const imagePath = resolve(config.assetsPath, `${name}.${format}`);
+    const imagePath = resolve(this._config.assetsPath, `${name}.${format}`);
     const directory = dirname(imagePath);
-    const writer = createWriteStream(imagePath);
 
     if (!existsSync(directory)) {
       mkdirSync(directory, {
@@ -163,15 +148,20 @@ export class FigmaAssetExporter {
       });
     }
 
+    const writer = createWriteStream(imagePath);
     const response = await axios({
       url: image,
       responseType: "stream",
     });
+
     response.data.pipe(writer);
 
     return new Promise((resolve, reject) => {
       writer.on("finish", resolve);
-      writer.on("error", reject);
+      writer.on("error", (error) => {
+        console.error(`Error saving asset ${name}:`, error);
+        reject(error);
+      });
     });
   }
 }
