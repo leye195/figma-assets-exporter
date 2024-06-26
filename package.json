@@ -1,0 +1,23 @@
+{
+  "name": "figma",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "tsc ./src/index.ts --outDir ./build",
+    "start": "pnpm build && node ./build/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "qs": "^6.12.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.9",
+    "@types/qs": "^6.9.15",
+    "ts-node": "^10.9.2",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.2"
+  }
+}
