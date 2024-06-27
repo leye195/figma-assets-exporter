@@ -3,7 +3,7 @@
     "target": "ES6", // or ES2020, ESNext
     "module": "ES6", // or ES2020, ESNext
     "rootDir": "./src",
-    "outDir": "./dist",
+    "outDir": "./build",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
