@@ -1,12 +1,12 @@
 {
   "name": "figma-asset-exporter",
-  "version": "0.0.3",
+  "version": "0.0.10",
   "description": "export asset from figma file",
-  "main": "./build/index.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc ./src/index.ts --declaration --emitDeclarationOnly --outDir ./build",
-    "start": "pnpm build && node ./build/index.js",
-    "publish": "npm publish"
+    "build": "tsc ./src/index.ts --declaration  --outDir ./dist",
+    "start": "pnpm build && node ./dist/index.js",
+    "publish-lib": "npm publish"
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,6 @@
     "figma",
     "figma-api"
   ],
-  "types": "./src/types/index.ts",
   "author": "YoungJae Lee",
   "license": "MIT",
   "dependencies": {
