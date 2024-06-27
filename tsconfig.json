@@ -2,19 +2,18 @@
   "compilerOptions": {
     "target": "ES6", // or ES2020, ESNext
     "module": "ES6", // or ES2020, ESNext
-    "rootDir": ".",
-    "outDir": "./build",
+    "rootDir": "./src",
+    "outDir": "./dist",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
 
     "moduleResolution": "node",
-
-    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "moduleDetection": "force",
-    "noEmit": true,
+    "noEmit": false,
+    "declaration": true,
 
     /* Linting */
     "strict": true,
@@ -22,6 +21,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "files": ["./src/index.ts", "./src/figma.ts"],
   "exclude": ["node_modules"]
 }

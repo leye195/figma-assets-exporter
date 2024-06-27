@@ -4,10 +4,12 @@
   "description": "export asset from figma file",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc ./src/index.ts --declaration  --outDir ./dist",
-    "start": "pnpm build && node ./dist/index.js",
+    "build": "tsc",
+    "build:example": "tsc ./src/example.ts",
+    "run:example": "pnpm build:example && node ./dist/example.js",
     "publish-lib": "npm publish"
   },
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/leye195/figma-assets-exporter.git"
