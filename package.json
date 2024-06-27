@@ -1,10 +1,10 @@
 {
   "name": "figma-asset-exporter",
-  "version": "0.0.10",
+  "version": "0.0.3",
   "description": "export asset from figma file",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "node esbuild.config.js && tsc --emitDeclarationOnly --outDir dist",
     "build:example": "tsc ./src/example.ts",
     "run:example": "pnpm build:example && node ./dist/example.js",
     "publish-lib": "npm publish"
@@ -27,6 +27,7 @@
   "devDependencies": {
     "@types/node": "^20.14.9",
     "@types/qs": "^6.9.15",
+    "esbuild": "^0.21.5",
     "ts-node": "^10.9.2",
     "tslib": "^2.6.3",
     "typescript": "^5.5.2"
