@@ -1,6 +1,6 @@
 {
   "name": "figma-asset-exporter",
-  "version": "0.0.3",
+  "version": "0.0.11",
   "description": "export asset from figma file",
   "main": "./dist/index.js",
   "scripts": {

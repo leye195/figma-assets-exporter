@@ -16,6 +16,7 @@ esbuild
     outdir: "dist",
     format: "cjs",
     bundle: true,
+    minify: true,
     logLevel: "info",
   })
   .catch(() => process.exit(1));
