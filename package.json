@@ -28,6 +28,7 @@
     "@types/node": "^20.14.9",
     "@types/qs": "^6.9.15",
     "esbuild": "^0.21.5",
+    "esbuild-runner": "^2.2.2",
     "ts-node": "^10.9.2",
     "tslib": "^2.6.3",
     "typescript": "^5.5.2"
