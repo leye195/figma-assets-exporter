@@ -1,10 +1,17 @@
 export type FigmaConfig = {
+  /** Scale factor for the exported image, defaults to 1 if not provided */
   scale?: number;
+  /** Format of the exported image, can be "svg", "png", or "jpg" */
   format?: "svg" | "png" | "jpg";
+  /** Personal access token for Figma API authentication */
   token: string;
+  /** ID of the Figma file containing assets */
   fileId: string;
+  /** Name of the page within the Figma file where assets are located */
   pageName: string;
+  /** Local path where assets should be saved */
   assetsPath: string;
+  /** Optional: Name of the frame within the page for targeted asset extraction */
   frameName?: string;
 };
 
@@ -79,6 +86,6 @@ export type FigmaAsset = {
 
 export type FigmaImage = {
   err: string;
-  images: Record<string, string>; // { [key: string]: string };
+  images: Record<string, string>;
   status: number;
 };

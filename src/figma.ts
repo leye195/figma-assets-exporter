@@ -6,6 +6,13 @@ import type { FigmaAsset, FigmaConfig, FigmaFile, FigmaImage } from "./types";
 
 const baseURL = "https://api.figma.com/v1";
 
+/**
+ * Represents the structure for extracting SVG assets from a Figma file.
+ * @param fileId - The unique identifier for the Figma file containing the SVGs.
+ * @param pageName - The name of the page within the Figma file where SVGs are located.
+ * @param frameName - Optional. The name of the frame within the page to narrow down SVG extraction.
+ * @param ids - Optional. Specific node IDs within the frame to target particular SVG assets.
+ */
 export type AssetsFromFigmaFile = {
   fileId: string;
   pageName: string;
