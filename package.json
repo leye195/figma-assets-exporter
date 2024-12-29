@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "node esbuild.config.js && tsc --emitDeclarationOnly --outDir dist",
-    "build:example": "tsc ./src/example.ts",
+    "build:example": "tsc ./src/example.ts --outDir dist",
     "run:example": "pnpm build:example && node ./dist/example.js",
     "publish-lib": "npm publish"
   },
