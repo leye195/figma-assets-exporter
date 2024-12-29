@@ -2,13 +2,13 @@ import { FigmaAssetExporter } from "./figma";
 
 (async () => {
   const figmaExporter = new FigmaAssetExporter({
-    token: "access token",
-    pageName: "All icons",
-    assetsPath: "assets/", // folder path that you want to store assets
-    fileId: "mgKaQN0rrDKx9FrfbtNJE0", // figma fileId
+    token: "access_token", // Access token for Figma API authentication
+    pageName: "⛳  Icons", // The name of the page to use within the Figma file
+    assetsPath: "assets/", // Folder path that you want to store assets
+    fileId: "aoYFvJICwPNqjPQNrUCcIO", // The ID of the Figma file
   });
 
-  const assets = await figmaExporter.getAssets(["489-220448"]); // node-id
+  const assets = await figmaExporter.getAssets(["1314-464"]); // node-id
   const results = await figmaExporter.exportAssets(assets);
   await figmaExporter.saveAssets(results);
 })();
